@@ -13,7 +13,6 @@ export function HotComicsSection({ comics }: HotComicsSectionProps) {
   const [rotation, setRotation] = useState(0);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
   const [currentX, setCurrentX] = useState(0);
   const navigate = useNavigate();
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -72,7 +71,6 @@ export function HotComicsSection({ comics }: HotComicsSectionProps) {
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
-    setStartX(e.clientX);
     setCurrentX(e.clientX);
   };
 
@@ -90,7 +88,6 @@ export function HotComicsSection({ comics }: HotComicsSectionProps) {
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setIsDragging(true);
-    setStartX(e.touches[0].clientX);
     setCurrentX(e.touches[0].clientX);
   };
 
