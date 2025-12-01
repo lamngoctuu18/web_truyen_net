@@ -56,11 +56,11 @@ export function ComicCard({
 
   return (
     <div 
-      className={`comic-card cursor-pointer group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 ${className}`}
+      className={`comic-card cursor-pointer group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col ${className}`}
       onClick={handleCardClick}
     >
       {/* Comic Cover */}
-      <div className="relative overflow-hidden aspect-[2/3]">
+      <div className="relative overflow-hidden aspect-[2/3] flex-shrink-0">
         <LazyImage
           src={comic.thumb_url}
           alt={comic.name}
@@ -120,14 +120,14 @@ export function ComicCard({
       </div>
 
       {/* Comic Info */}
-      <div className="p-4 space-y-2.5">
-        <h3 className="text-base font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 min-h-[4rem]" title={comic.name}>
+      <div className="p-4 space-y-2.5 flex-1 flex flex-col">
+        <h3 className="text-sm font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 leading-tight flex-shrink-0" title={comic.name}>
           {comic.name}
         </h3>
         
         {/* Latest Chapter Badge - Always Visible */}
         {comic.chaptersLatest && comic.chaptersLatest.length > 0 && (
-          <div className="flex items-center gap-2 p-2 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border border-blue-100 dark:border-blue-800">
+          <div className="flex items-center gap-2 p-2 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border border-blue-100 dark:border-blue-800 flex-shrink-0">
             <div className="flex-shrink-0 p-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-md">
               <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -143,7 +143,7 @@ export function ComicCard({
         
         {/* Categories */}
         {comic.category && comic.category.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-1.5 flex-shrink-0">
             {comic.category.slice(0, 2).map((cat, index) => (
               <span 
                 key={cat._id || cat.id || index}
@@ -161,7 +161,7 @@ export function ComicCard({
         )}
 
         {/* Last Updated */}
-        <div className="flex items-center justify-between text-xs pt-1">
+        <div className="flex items-center justify-between text-xs pt-1 mt-auto">
           {comic.updatedAt && (
             <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
               <Clock className="w-3.5 h-3.5" />
