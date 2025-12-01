@@ -35,6 +35,8 @@ export function ReaderPage() {
   const [comicData, setComicData] = useState<any>(null);
   const { history, addToHistory } = useReadingHistory();
   const dropupRef = useRef<HTMLDivElement>(null);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [showHeader, setShowHeader] = useState(true);
 
   // First, fetch comic detail to get chapter API URL
   useEffect(() => {
@@ -157,6 +159,30 @@ export function ReaderPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Handle scroll to show/hide header
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Show header when scrolling up, hide when scrolling down
+      if (currentScrollY < lastScrollY) {
+        setShowHeader(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowHeader(false);
+      }
+      
+      // Always show header at the top
+      if (currentScrollY < 100) {
+        setShowHeader(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
   const handlePrevChapter = () => {
     const chapterNum = parseInt(chapter || '1');
     if (chapterNum > 1) {
@@ -210,7 +236,7 @@ export function ReaderPage() {
       {/* Header Controls */}
       <div
         className={`fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/90 to-transparent backdrop-blur-sm transition-all duration-300 ${
-          showControls ? 'translate-y-0' : '-translate-y-full'
+          showHeader && showControls ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
         <div className="container mx-auto px-4 py-4">
@@ -235,13 +261,6 @@ export function ReaderPage() {
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => setShowChapterList(true)}
-                className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white"
-                title="Danh sách chương"
-              >
-                <List className="w-6 h-6" />
-              </button>
               <Link
                 to="/"
                 className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white"
@@ -249,6 +268,13 @@ export function ReaderPage() {
               >
                 <Home className="w-6 h-6" />
               </Link>
+              <button
+                onClick={() => setShowChapterList(true)}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white"
+                title="Danh sách chương"
+              >
+                <List className="w-6 h-6" />
+              </button>
             </div>
           </div>
         </div>

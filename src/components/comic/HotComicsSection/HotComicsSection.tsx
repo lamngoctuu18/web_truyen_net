@@ -66,15 +66,12 @@ export function HotComicsSection({ comics }: HotComicsSectionProps) {
     setCurrentSlide(index);
   };
 
-  const startIndex = currentSlide * itemsPerSlide;
-  const visibleComics = comics.slice(startIndex, startIndex + itemsPerSlide);
-
   return (
     <section className="relative py-16 overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-red-500/5 to-pink-500/5 dark:from-orange-500/10 dark:via-red-500/10 dark:to-pink-500/10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,100,50,0.1),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,50,100,0.1),transparent_50%)]"></div>
+      {/* Animated Background - made more transparent for main bg to show */}
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/3 via-red-500/3 to-pink-500/3 dark:from-orange-500/5 dark:via-red-500/5 dark:to-pink-500/5">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,100,50,0.05),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,50,100,0.05),transparent_50%)]"></div>
       </div>
 
       {/* Floating Elements */}
@@ -88,7 +85,7 @@ export function HotComicsSection({ comics }: HotComicsSectionProps) {
         <Zap className="w-14 h-14 text-red-500/20" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="w-full px-6 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12 animate-fade-in">
           <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-orange-500/10 via-red-500/10 to-pink-500/10 backdrop-blur-sm rounded-full border border-orange-500/20 mb-4">
