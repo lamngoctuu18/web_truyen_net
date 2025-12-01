@@ -174,4 +174,44 @@
       transform: translateY(0);
     }
   }
+
+  /* 3D Carousel animations */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 3s ease-in-out infinite 1.5s;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .animate-shine {
+    animation: shine 2s ease-in-out infinite;
+  }
+
+  @keyframes shine {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(200%);
+    }
+  }
+
+  /* Preserve 3D for carousel */
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .perspective-2000 {
+    perspective: 2000px;
+  }
 }
