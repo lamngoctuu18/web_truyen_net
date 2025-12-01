@@ -1,0 +1,1 @@
+export { HotComicsSection } from './HotComicsSection';
