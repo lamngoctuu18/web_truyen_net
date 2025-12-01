@@ -98,7 +98,7 @@ export function Header({ onSearch }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/70 dark:bg-gray-900/70 backdrop-blur-md border-b border-gray-200/30 dark:border-gray-700/30 shadow-lg transition-all duration-300">
+    <header className="sticky top-0 z-50 bg-slate-900/60 dark:bg-slate-950/70 backdrop-blur-md border-b border-slate-700/50 dark:border-slate-800/50 shadow-xl transition-all duration-300">
       <div className="w-full">
         <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-6">
           {/* Logo */}
@@ -304,42 +304,60 @@ export function Header({ onSearch }: HeaderProps) {
 
       {/* Mobile Menu */}
       {state.ui.isMenuOpen && (
-        <div className="md:hidden bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-t border-gray-200/50 dark:border-gray-700/50 animate-fade-in shadow-xl">
-          <nav className="px-3 sm:px-6 py-2 sm:py-3 space-y-1">
+        <div className="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-t border-gray-200/50 dark:border-gray-700/50 animate-fade-in shadow-2xl">
+          <nav className="px-4 py-4 space-y-2 max-h-[80vh] overflow-y-auto">
             <Link 
               to="/" 
-              className="block px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-lg sm:rounded-xl font-medium transition-all duration-200 active:scale-98"
+              className="flex items-center gap-3 px-4 py-3 text-base text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-xl font-medium transition-all duration-200 active:scale-98"
               onClick={toggleMenu}
             >
-              🏠 Trang chủ
+              <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl shadow-lg">
+                <span className="text-xl">🏠</span>
+              </div>
+              <span className="flex-1">Trang chủ</span>
             </Link>
+            
             <Link 
               to="/categories" 
-              className="block px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-lg sm:rounded-xl font-medium transition-all duration-200 active:scale-98"
+              className="flex items-center gap-3 px-4 py-3 text-base text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-xl font-medium transition-all duration-200 active:scale-98"
               onClick={toggleMenu}
             >
-              📚 Thể loại
+              <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl shadow-lg">
+                <span className="text-xl">📚</span>
+              </div>
+              <span className="flex-1">Thể loại</span>
             </Link>
+            
             <Link 
               to="/favorites" 
-              className="relative block px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-gray-700 dark:text-gray-200 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-gradient-to-r hover:from-pink-50 hover:to-red-50 dark:hover:from-pink-900/20 dark:hover:to-red-900/20 rounded-lg sm:rounded-xl font-medium transition-all duration-200 active:scale-98"
+              className="flex items-center gap-3 px-4 py-3 text-base text-gray-700 dark:text-gray-200 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-gradient-to-r hover:from-pink-50 hover:to-red-50 dark:hover:from-pink-900/20 dark:hover:to-red-900/20 rounded-xl font-medium transition-all duration-200 active:scale-98"
               onClick={toggleMenu}
             >
-              <span className="flex items-center justify-between">
-                <span>💖 Yêu thích</span>
+              <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl shadow-lg relative">
+                <span className="text-xl">💖</span>
                 {count > 0 && (
-                  <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-gradient-to-r from-pink-500 to-red-500 text-white text-xs font-bold rounded-full shadow-lg animate-pulse">
+                  <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-red-600 text-white text-xs font-bold rounded-full border-2 border-white dark:border-gray-900 shadow-lg">
                     {count > 99 ? '99+' : count}
                   </span>
                 )}
-              </span>
+              </div>
+              <span className="flex-1">Yêu thích</span>
+              {count > 0 && (
+                <span className="px-2 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 text-xs font-bold rounded-lg">
+                  {count}
+                </span>
+              )}
             </Link>
+            
             <Link 
               to="/history" 
-              className="block px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-lg sm:rounded-xl font-medium transition-all duration-200 active:scale-98"
+              className="flex items-center gap-3 px-4 py-3 text-base text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-xl font-medium transition-all duration-200 active:scale-98"
               onClick={toggleMenu}
             >
-              📖 Lịch sử
+              <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl shadow-lg">
+                <span className="text-xl">📖</span>
+              </div>
+              <span className="flex-1">Lịch sử</span>
             </Link>
           </nav>
         </div>

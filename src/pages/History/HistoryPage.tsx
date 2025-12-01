@@ -64,6 +64,11 @@ export function HistoryPage() {
     chapters: ReadingHistoryItem[];
   }>);
 
+  // Sort chapters inside each comic by latest read time
+  groupedHistory.forEach(group => {
+    group.chapters.sort((a, b) => new Date(b.readAt).getTime() - new Date(a.readAt).getTime());
+  });
+
   // Sort by latest read
   groupedHistory.sort((a, b) => new Date(b.latestRead).getTime() - new Date(a.latestRead).getTime());
 
@@ -238,77 +243,134 @@ export function HistoryPage() {
           ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' 
           : 'space-y-4'
         }>
-          {groupedHistory.map((group) => (
-            <div
-              key={group.comicSlug}
-              className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden transition-all hover:shadow-xl hover:scale-[1.02] animate-fade-in ${
-                viewMode === 'list' ? 'flex gap-4 p-4' : 'flex flex-col'
-              }`}
-            >
-              {/* Comic Image */}
-              <div className={viewMode === 'list' ? 'flex-shrink-0 w-24 h-32' : 'aspect-[3/4] relative'}>
-                <LazyImage
-                  src={getImageUrl(group.thumbUrl)}
-                  alt={group.comicName}
-                  className="w-full h-full object-cover rounded-lg"
-                />
-                {viewMode === 'grid' && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent rounded-lg" />
-                )}
-              </div>
+          {groupedHistory.map((group) => {
+            const latestChapter = group.chapters[0];
+            const chapterLimit = viewMode === 'list' ? 3 : 2;
+            const extraChapters = Math.max(group.chapters.length - chapterLimit, 0);
 
-              {/* Comic Info */}
-              <div className={`${viewMode === 'list' ? 'flex-1' : 'p-4'}`}>
-                <Link
-                  to={`/comic/${group.comicSlug}`}
-                  className="block hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                >
-                  <h3 className={`font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 ${
-                    viewMode === 'list' ? 'text-lg' : 'text-base'
-                  }`}>
-                    {group.comicName}
-                  </h3>
-                </Link>
+            const cardBase = 'group relative overflow-hidden rounded-2xl bg-white/90 dark:bg-gray-900/70 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-white/10 dark:border-white/5 backdrop-blur-xl animate-fade-in';
+            const cardClasses = viewMode === 'grid'
+              ? `${cardBase} flex flex-col h-full`
+              : `${cardBase} flex gap-4 p-4 items-start`;
 
-                {/* Latest Chapters */}
-                <div className="space-y-2 mb-3">
-                  {group.chapters.slice(0, viewMode === 'list' ? 3 : 2).map((chapter) => (
-                    <Link
-                      key={`${chapter.comicSlug}-${chapter.chapterNumber}`}
-                      to={`/comic/${chapter.comicSlug}/chapter/${chapter.chapterNumber}`}
-                      className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors group"
-                    >
-                      <span className="text-sm text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 font-medium">
-                        {chapter.chapterName}
+            const imageWrapperClasses = viewMode === 'grid'
+              ? 'relative overflow-hidden aspect-[2/3] w-full'
+              : 'relative overflow-hidden w-28 h-40 flex-shrink-0 rounded-xl';
+
+            const infoWrapperClasses = viewMode === 'grid'
+              ? 'p-4 flex-1 flex flex-col gap-3'
+              : 'flex-1 flex flex-col gap-3';
+
+            const removeButtonClasses = viewMode === 'list'
+              ? 'pointer-events-auto p-2 rounded-xl bg-white/25 text-white shadow-xl backdrop-blur-xl opacity-100 transform translate-x-0 transition-all duration-300 hover:bg-red-500/80'
+              : 'pointer-events-auto p-2 rounded-xl bg-white/20 text-white shadow-xl backdrop-blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 hover:bg-red-500/80';
+
+            return (
+              <div key={group.comicSlug} className={cardClasses}>
+                {/* Comic Image */}
+                <div className={imageWrapperClasses}>
+                  <LazyImage
+                    src={getImageUrl(group.thumbUrl)}
+                    alt={group.comicName}
+                    className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${viewMode === 'grid' ? '' : 'rounded-xl'}`}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none" />
+
+                  <div className="absolute inset-0 flex flex-col justify-between p-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="px-3 py-1 text-xs font-semibold text-white/90 bg-black/40 backdrop-blur-md rounded-lg shadow-lg">
+                        {formatTimeAgo(group.latestRead)}
                       </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {formatTimeAgo(chapter.readAt)}
-                      </span>
-                    </Link>
-                  ))}
-                  {group.chapters.length > (viewMode === 'list' ? 3 : 2) && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                      +{group.chapters.length - (viewMode === 'list' ? 3 : 2)} chương khác
-                    </p>
-                  )}
+                      <button
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          handleRemoveComic(group.comicSlug);
+                        }}
+                        className={removeButtonClasses}
+                        title="Xóa khỏi lịch sử"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    {latestChapter && (
+                      <Link
+                        to={`/comic/${latestChapter.comicSlug}/chapter/${latestChapter.chapterNumber}`}
+                        className="pointer-events-auto opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0"
+                      >
+                        <div className="bg-gradient-to-r from-blue-600/95 to-purple-600/95 rounded-xl px-4 py-3 shadow-lg border border-white/20 backdrop-blur-lg flex items-center justify-between gap-3">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-semibold text-white/80 uppercase tracking-wide">Tiếp tục đọc</p>
+                            <p className="text-sm font-bold text-white truncate">{latestChapter.chapterName}</p>
+                          </div>
+                          <div className="p-2 bg-white/20 rounded-lg">
+                            <Clock className="w-4 h-4 text-white" />
+                          </div>
+                        </div>
+                      </Link>
+                    )}
+                  </div>
                 </div>
 
-                {/* Actions */}
-                <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-600">
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {group.chapters.length} chương
-                  </span>
-                  <button
-                    onClick={() => handleRemoveComic(group.comicSlug)}
-                    className="p-1 text-gray-400 hover:text-red-500 transition-colors"
-                    title="Xóa khỏi lịch sử"
+                {/* Comic Info */}
+                <div className={infoWrapperClasses}>
+                  <Link
+                    to={`/comic/${group.comicSlug}`}
+                    className="block"
                   >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                    <h3 className={`font-bold text-gray-900 dark:text-white line-clamp-2 transition-colors duration-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 ${
+                      viewMode === 'list' ? 'text-lg' : 'text-base'
+                    }`}>
+                      {group.comicName}
+                    </h3>
+                  </Link>
+
+                  {latestChapter && (
+                    <div className="rounded-xl border border-blue-100/40 dark:border-blue-900/30 bg-gradient-to-r from-blue-50/60 to-purple-50/60 dark:from-blue-900/20 dark:to-purple-900/10 px-4 py-3">
+                      <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-0.5 uppercase tracking-wide">Chương đang đọc</p>
+                      <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate">{latestChapter.chapterName}</p>
+                    </div>
+                  )}
+
+                  <div className="flex flex-col gap-2">
+                    {group.chapters.slice(0, chapterLimit).map((chapter) => (
+                      <Link
+                        key={`${chapter.comicSlug}-${chapter.chapterNumber}`}
+                        to={`/comic/${chapter.comicSlug}/chapter/${chapter.chapterNumber}`}
+                        className="flex items-center justify-between gap-3 px-3 py-2 rounded-xl border border-white/30 dark:border-white/10 bg-white/60 dark:bg-white/5 hover:border-blue-400/60 hover:bg-blue-50/40 dark:hover:bg-blue-900/20 transition-all"
+                      >
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
+                          {chapter.chapterName}
+                        </span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                          {formatTimeAgo(chapter.readAt)}
+                        </span>
+                      </Link>
+                    ))}
+                    {extraChapters > 0 && (
+                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 text-center">
+                        +{extraChapters} chương khác
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 pt-3 mt-auto border-t border-white/40 dark:border-white/10">
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5" />
+                      Đã đọc {group.chapters.length} chương
+                    </span>
+                    <Link
+                      to={`/comic/${group.comicSlug}`}
+                      className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+                    >
+                      Xem truyện
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

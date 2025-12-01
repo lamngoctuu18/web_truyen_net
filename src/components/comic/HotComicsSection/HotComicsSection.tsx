@@ -68,11 +68,6 @@ export function HotComicsSection({ comics }: HotComicsSectionProps) {
 
   return (
     <section className="relative py-16 overflow-hidden">
-      {/* Animated Background - made more transparent for main bg to show */}
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/3 via-red-500/3 to-pink-500/3 dark:from-orange-500/5 dark:via-red-500/5 dark:to-pink-500/5">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,100,50,0.05),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,50,100,0.05),transparent_50%)]"></div>
-      </div>
 
       {/* Floating Elements */}
       <div className="absolute top-20 left-10 animate-float">

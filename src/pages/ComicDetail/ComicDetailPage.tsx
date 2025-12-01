@@ -4,7 +4,7 @@ import { useFavorites } from '../../hooks/useFavorites';
 import { useReadingHistory } from '../../hooks/useReadingHistory';
 import { Loading } from '../../components/common/Loading';
 import { LazyImage } from '../../components/common/LazyImage';
-import { Heart, Play, User, Tag, BookOpen, ChevronRight, Calendar } from 'lucide-react';
+import { Heart, Play, User, Tag, BookOpen, ChevronRight, Calendar, PlayCircle, FastForward } from 'lucide-react';
 import { formatTimeAgo, getImageUrl } from '../../utils/helpers';
 
 export function ComicDetailPage() {
@@ -87,15 +87,35 @@ export function ComicDetailPage() {
               <div className="p-6 space-y-4">
                 {/* Action Buttons */}
                 <div className="space-y-3">
-                  <button
-                    onClick={() => handleReadClick()}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-200"
-                  >
-                    <Play className="w-5 h-5" fill="white" />
-                    <span>
-                      {lastRead ? `Tiếp tục đọc Chapter ${lastRead.chapterNumber}` : 'Bắt đầu đọc'}
-                    </span>
-                  </button>
+                  {/* Continue Reading / Start Reading */}
+                  {lastRead ? (
+                    <button
+                      onClick={() => handleReadClick()}
+                      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-200"
+                    >
+                      <Play className="w-5 h-5" fill="white" />
+                      <span>Tiếp tục đọc Chapter {lastRead.chapterNumber}</span>
+                    </button>
+                  ) : null}
+
+                  {/* Read from Start & Latest Chapter Grid */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => handleReadClick(1)}
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-200"
+                    >
+                      <PlayCircle className="w-5 h-5" />
+                      <span className="text-sm">Đọc từ đầu</span>
+                    </button>
+                    
+                    <button
+                      onClick={() => handleReadClick(chapterList.length)}
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white font-semibold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-200"
+                    >
+                      <FastForward className="w-5 h-5" />
+                      <span className="text-sm">Mới nhất</span>
+                    </button>
+                  </div>
                   
                   <button
                     onClick={handleFavoriteClick}

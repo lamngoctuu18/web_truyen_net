@@ -1,3 +1,5 @@
+import loadingBlushGif from '../../../assets/loading-blush.gif?url';
+
 interface LoadingProps {
   size?: 'sm' | 'md' | 'lg';
   text?: string;
@@ -9,20 +11,21 @@ export function Loading({
   text = 'Đang tải...', 
   className = '' 
 }: LoadingProps) {
-  const sizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-8 h-8',
-    lg: 'w-12 h-12'
+  const sizeClasses: Record<NonNullable<LoadingProps['size']>, string> = {
+    sm: 'w-16',
+    md: 'w-24',
+    lg: 'w-32'
   };
 
   return (
     <div className={`flex flex-col items-center justify-center p-4 ${className}`}>
-      <div 
-        className={`${sizeClasses[size]} border-2 border-primary-200 border-t-primary-600 rounded-full animate-spin`}
-        aria-label="Loading"
-      ></div>
+      <img
+        src={loadingBlushGif}
+        alt="Đang tải"
+        className={`${sizeClasses[size]} h-auto animate-pulse drop-shadow-lg`}
+      />
       {text && (
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+        <p className="mt-3 text-sm font-medium text-gray-600 dark:text-gray-400 text-center">
           {text}
         </p>
       )}

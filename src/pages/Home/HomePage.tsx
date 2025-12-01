@@ -40,18 +40,14 @@ export function HomePage() {
   }
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen">
       {/* Hot Comics Section */}
       {data?.popular && (
         <HotComicsSection comics={data.popular.data.items} />
       )}
 
-      {/* Other Sections with minimal overlay */}
-      <div className="relative w-full px-6 py-16 space-y-20">
-        {/* Very light overlay for card readability only */}
-        <div className="absolute inset-0 bg-white/10 dark:bg-gray-900/15"></div>
-        
-        <div className="relative z-10 space-y-20">
+      {/* Other Sections */}
+      <div className="w-full px-6 py-16 space-y-20">
         {/* New Comics */}
         {data?.newest && (
           <section className="animate-slide-up">
@@ -105,7 +101,6 @@ export function HomePage() {
             />
           </section>
         )}
-        </div>
       </div>
     </div>
   );

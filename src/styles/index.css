@@ -174,21 +174,4 @@
       transform: translateY(0);
     }
   }
-
-  /* Demon Slayer Background */
-  .demon-slayer-bg {
-    background-image: url('/demon-slayer-bg.jpg'), url('/hinh-nen-thanh-guom-diet-quy-55-576x1024.jpg');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-  }
-
-  /* Fallback for when image doesn't load */
-  .demon-slayer-bg::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    z-index: -1;
-  }
 }

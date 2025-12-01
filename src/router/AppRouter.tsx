@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { AppProvider } from '../contexts/AppContext';
-import { useNavigate } from 'react-router-dom';
-import Header from '../components/common/Header';
+import Layout from './Layout';
 
 // Pages
 import HomePage from '../pages/Home';
@@ -14,19 +13,10 @@ import { HistoryPage } from '../pages/History/HistoryPage';
 import ReaderPage from '../pages/Reader';
 
 function LayoutWrapper() {
-  const navigate = useNavigate();
-
-  const handleSearch = (query: string) => {
-    navigate(`/search?q=${encodeURIComponent(query)}`);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
-      <Header onSearch={handleSearch} />
-      <main className="w-full">
-        <Outlet />
-      </main>
-    </div>
+    <Layout>
+      <Outlet />
+    </Layout>
   );
 }
 
